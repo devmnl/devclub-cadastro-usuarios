@@ -3,46 +3,53 @@ import './style.css'
 import Trash from '../../assets/trash.svg'
 import api from '../../services/api'
 
-
 function Home() {
-
-
-  const [users, setUsers] = useState([])
-
-  const inputName = useRef()
-  const inputAge = useRef()
-  const inputEmail = useRef()
+  const [users, setUsers] = useState([]);
+  const inputName = useRef();
+  const inputAge = useRef();
+  const inputEmail = useRef();
 
   async function getUsers() {
-    const userFromApi = await api.get('/usuarios')
-
-    setUsers(userFromApi.data)
+    try {
+      const userFromApi = await api.get('/usuarios');
+      setUsers(userFromApi.data);
+    } catch (error) {
+      console.error("Erro ao buscar usuários:", error);
+    }
   }
 
   async function createUsers() {
-    await api.post('/usuarios', {
-      name: inputName.current.value,
-      age: inputAge.current.value,
-      email: inputEmail.current.value
-    })
+    const name = inputName.current.value;
+    const age = inputAge.current.value;
+    const email = inputEmail.current.value;
 
-    getUsers()
+    if (!name || !age || !email) {
+      alert("Todos os campos são obrigatórios.");
+      return;
+    }
 
-    
+    try {
+      await api.post('/usuarios', { name, age, email });
+      getUsers();
+    } catch (error) {
+      console.error("Erro ao criar usuário:", error);
+    }
   }
 
   async function deleteUsers(id) {
-    await api.delete(`/usuarios/${id}`)
-
-    getUsers()
+    try {
+      await api.delete(`/usuarios/${id}`);
+      getUsers();
+    } catch (error) {
+      console.error("Erro ao deletar usuário:", error);
+    }
   }
 
   useEffect(() => {
-    getUsers()
-  }, [])
+    getUsers();
+  }, []);
 
   return (
-
     <div className='container'>
       <form>
         <h1>Cadastro de Usuários</h1>
@@ -53,7 +60,6 @@ function Home() {
       </form>
 
       {users.map(user => (
-
         <div key={user.id} className='card'>
           <div>
             <p>Nome: <span>{user.name}</span></p>
@@ -61,15 +67,11 @@ function Home() {
             <p>Email: <span>{user.email}</span></p>
           </div>
           <button onClick={() => deleteUsers(user.id)}>
-            <img src={Trash} alt='Excluir'/>
+            <img src={Trash} alt='Excluir' />
           </button>
         </div>
-
       ))}
-
-
     </div>
-
   )
 }
 
