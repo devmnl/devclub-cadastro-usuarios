@@ -60,13 +60,13 @@ input {
 }
 
 .card p {
-  color: #fff;
+  color: #ffffff;
   font-weight: bold;
 }
 
 .card p span {
   font-weight: normal;
-  color: red;
+  color: rgb(10, 252, 2);
 }
 
 .card button {
