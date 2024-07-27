@@ -66,6 +66,7 @@ input {
 
 .card p span {
   font-weight: normal;
+  color: red;
 }
 
 .card button {
